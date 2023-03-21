@@ -6,7 +6,9 @@ terraform {
     }
   }
 }
-
+provider "aws" {
+  region = "eu-central-1"
+}
 
 resource "aws_instance" "build" {
   ami           = "ami-0e067cc8a2b58de59"
