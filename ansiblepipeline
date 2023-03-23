@@ -1,0 +1,15 @@
+pipeline{
+    agent any
+    stages{
+        stage('checkout git'){
+            steps{
+                git 'https://github.com/Vesna3517/TFtemp.git'
+            }
+        }
+          stage('ansible'){
+            steps{
+                ansiblePlaybook become: true, credentialsId: 'cdc4c2d8-994c-4317-925e-e971e2f7c6e7', disableHostKeyChecking: true, installation: 'ansible', inventory: 'dev.inv', playbook: 'ansible.yml'
+            }
+        }
+    }
+}
