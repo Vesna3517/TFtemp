@@ -1,0 +1,60 @@
+---
+- name: install docker
+  hosts: all
+  become: yes
+  tasks:
+    - apt:
+        name: docker.io
+        state: present 
+    - apt:
+        name: python-pip
+        state: present
+    - pip:
+        name: docker-py
+        state: present
+    - file:
+        path: /tmp/java
+        state: directory 
+- name: build java
+  hosts: bld 
+  become: yes
+  tasks: 
+    - name: clone from git
+      git:
+        repo: 'https://github.com/Vesna3517/boxfuse-sample-java-war-hello-copy.git'
+        dest: /tmp/java
+        clone: yes
+    - name: Start a container with a command
+      docker_container:
+        name: mvn
+        image: maven:3.3.9-jdk-8
+        volumes: /tmp/java:/opt/maven
+        working_dir: /opt/maven
+        command: mvn package
+- name: Synchronization 
+  hosts: bld
+  become: yes
+  tasks:
+    - synchronize:
+        mode: pull
+        src: /tmp/java/
+        dest: /tmp/java/
+- name: Synchronization 
+  hosts: web
+  become: yes
+  tasks:
+    - synchronize:
+        mode: push
+        src: /tmp/java/
+        dest: /tmp/java/
+- name: web server
+  hosts: web
+  become: yes
+  tasks:
+    - name: Container present
+      docker_container:
+        name: tomcat 
+        state: started
+        image: tomcat:9
+        ports: 8080:8080
+        volumes: /tmp/java/target:/usr/local/tomcat/webapps
