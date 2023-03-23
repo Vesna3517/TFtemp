@@ -4,14 +4,11 @@
   become: yes
   tasks:
     - apt:
-        name: docker.io
-        state: present 
-    - apt:
-        name: python-pip
-        state: present
-    - pip:
-        name: docker-py
-        state: present
+        update_cache: yes
+        pkg:
+        - docker.io
+        - python-pip
+        - docker-py
     - file:
         path: /tmp/java
         state: directory 
