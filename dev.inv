@@ -1,4 +1,4 @@
 [bld]
-172.31.18.220 ansible_user ubuntu
+172.31.18.220 ansible_user=ubuntu
 [web]
-172.31.18.186 ansible_user ubuntu
+172.31.18.186 ansible_user=ubuntu
