@@ -8,7 +8,9 @@
         pkg:
         - docker.io
         - python3-pip
-        - docker-py
+    - pip:
+        name: docker-py
+        state: present
     - file:
         path: /tmp/java
         state: directory 
